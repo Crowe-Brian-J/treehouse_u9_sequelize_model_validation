@@ -33,12 +33,20 @@ app.use((req, res) => {
 
 // Setup a global error handler.
 app.use((err, req, res, next) => {
-  console.error(`Global error handler: ${JSON.stringify(err.stack)}`)
+  console.error(`Global error handler: ${err.name}`)
 
-  res.status(500).json({
-    message: err.message,
-    error: process.env.NODE_ENV === 'production' ? {} : err
-  })
+  if (
+    err.name === 'SequelizeValidationError' ||
+    err.name === 'SequelizedUniqueConstraintError'
+  ) {
+    const errors = err.errors.map((e) => e.message)
+    res.status(400).json({ errors })
+  } else {
+    res.status(err.status || 500).json({
+      message: err.message,
+      error: process.env.NODE_ENV === 'production' ? {} : err
+    })
+  }
 })
 
 // Set our port.

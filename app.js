@@ -37,7 +37,7 @@ app.use((err, req, res, next) => {
 
   if (
     err.name === 'SequelizeValidationError' ||
-    err.name === 'SequelizedUniqueConstraintError'
+    err.name === 'SequelizeUniqueConstraintError'
   ) {
     const errors = err.errors.map((e) => e.message)
     res.status(400).json({ errors })

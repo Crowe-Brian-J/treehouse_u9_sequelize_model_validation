@@ -1,0 +1,1 @@
+# treehouse_u9_sequelize_model_validation
